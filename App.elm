@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Html exposing (Html, text)
+import Html.Attributes
 import Html.Events
 import Json.Encode exposing (Value)
 
@@ -37,6 +38,9 @@ update msg model =
 
         ToggleOpen ->
             let
+                _ =
+                    Debug.log "ToggleOpen clicked" ""
+
                 newSubModel =
                     Maybe.map (always Nothing) model.subModel
                         |> Maybe.withDefault (Just "init")
@@ -54,12 +58,18 @@ update msg model =
             ( { model | subModel = newSubModel }, Cmd.none )
 
 
-updateSub msg model =
+updateSub : SubMsg -> Maybe String -> ( Maybe String, Cmd Msg )
+updateSub msg _ =
     case msg of
         SetSubModel s ->
+            let
+                _ =
+                    Debug.log "SetSubModel clicked" s
+            in
             ( Just s, Cmd.none )
 
 
+view : Model -> Html Msg
 view model =
     Html.div [ Html.Events.onClick NoOp ]
         [ Html.button [ Html.Events.onClick ToggleOpen ] [ Html.text "Open" ]
@@ -74,11 +84,13 @@ viewSub subModel =
             Html.div []
                 [ Html.button
                     [ Html.Events.onClick <| SetSubModel "Clicked, yeah."
+                    , Html.Attributes.attribute "onClick" "console && console.log('Clicked second btn')"
                     ]
                     [ Html.text <| "Click here." ++ m ]
                 ]
         )
         subModel
+        -- For make it work in IE Change this to: |> Maybe.withDefault (Html.div [] [ Html.text ""] )
         |> Maybe.withDefault (Html.text "")
 
 
