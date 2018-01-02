@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Html exposing (Html, text)
 import Html.Events
+import Json.Encode exposing (Value)
 
 
 type alias Model =
@@ -9,7 +10,8 @@ type alias Model =
 
 
 type Msg
-    = ToggleOpen
+    = NoOp
+    | ToggleOpen
     | SayHello
     | SubModelMsg SubMsg
 
@@ -18,18 +20,26 @@ type SubMsg
     = SetSubModel String
 
 
-init =
+init : Value -> ( Model, Cmd Msg )
+init flags_ =
+    let
+        _ =
+            Debug.log "Program initialized with flags" flags_
+    in
     ( Model Nothing, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
         ToggleOpen ->
             let
                 newSubModel =
                     Maybe.map (always Nothing) model.subModel
-                        |> Maybe.withDefault (Just "ASDF")
+                        |> Maybe.withDefault (Just "init")
             in
             ( { model | subModel = newSubModel }, Cmd.none )
 
@@ -51,12 +61,13 @@ updateSub msg model =
 
 
 view model =
-    Html.div []
+    Html.div [ Html.Events.onClick NoOp ]
         [ Html.button [ Html.Events.onClick ToggleOpen ] [ Html.text "Open" ]
         , Html.map SubModelMsg <| viewSub model.subModel
         ]
 
 
+viewSub : Maybe String -> Html SubMsg
 viewSub subModel =
     Maybe.map
         (\m ->
@@ -71,9 +82,9 @@ viewSub subModel =
         |> Maybe.withDefault (Html.text "")
 
 
-main : Program Never Model Msg
+main : Program Value Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { init = init
         , view = view
         , update = update

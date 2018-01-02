@@ -5,7 +5,7 @@ yarn.lock: package.json
 	yarn install --yes
 
 build: yarn.lock
-	elm-make App.elm --output=index.html
+	elm-make App.elm --output=app.js
 
 dev: build
 	PATH=node_modules/.bin:$$PATH node_modules/http-server/bin/http-server ./ -a 0.0.0.0
