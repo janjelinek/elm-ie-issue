@@ -1,7 +1,7 @@
 # elm-ie-issue
 Just code to help replicate issue with Internet explorer
 
-Trying to create minimal app with specific issue on Internet Explorer 11/10 and Edge.
+Trying to create minimal app with specific issue on Internet Explorer 11/10.
 It happens when some submodule returns `Html.text ""` and it's mapped to specific Msg in parent module.
 When this submodule state is changed and `Html.text ""` is replaced by some other stuff with Events, those Events are not propagated
 to parent module. In source code of Elm is missing info about mapped Msg.
@@ -26,7 +26,7 @@ Chrome vs IE (simple dump of objects - patches from compiled Elm code)
 
 How to reproduce?
 ------
-Open IE (11,10) (or Edge) ideally with cleared browser cache. Open URL below or local host project `make dev`
+Open IE (11,10) ideally with cleared browser cache. Open URL below or local host project `make dev`
 and try to click on "Open", you'll see another button but clicking on this second button doesn't work.
 Event not attached via Elm (onClick attribute) is fired (see console) but Elm msg is not properly handled.
 
@@ -35,5 +35,7 @@ and this bug was caused every time (even if you reload page).
 
 Could be checked here https://rawgit.com/janjelinek/elm-ie-issue/master/index.html
 
+Video with bug recorded here: [elm-ie-bug.mov](elm-ie-bug.mov)
+Recorded on IE version 11.0.9600.18860 see [EI-version.png](IE-version.png)
 
-I hope this is enough to reproduce this bug on every device with Internet Explorer or Edge browser.
+I hope this is enough to reproduce this bug on every device with Internet Explorer.
