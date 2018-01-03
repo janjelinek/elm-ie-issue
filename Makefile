@@ -8,7 +8,7 @@ yarn.lock: package.json
 timestamp := $(shell /bin/date +%s)
 
 prepareIndex: _index.html
-	cp _index.html index.html && t= sed -i '.backup' "s/{VERSION}/$(timestamp)/g" index.html && rm index.html.backup && echo "shit it $(timestamp)"
+	cp _index.html index.html && t= sed -i '.backup' "s/{VERSION}/$(timestamp)/g" index.html && rm index.html.backup
 
 build: yarn.lock
 	elm-make App.elm --output=app.js
